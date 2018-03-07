@@ -41,14 +41,45 @@ def convertIndecesTensorToHelical(indeces,lengths):
         index += indeces[i]*coeff
     return hindex
 
-def covariantBaseAtPoint(indeces,lengths,rmap,qmap):
+def buildStencils(indeces,lengths,stencilSize):
+    # finite differences are assumed to be centered, thus stencilSize must an odd number
+    # if the central finite difference cannot be performed, an alternative is computed
+    stencilIndeces = []
+    deltaIndex = np.floor(0.5*stencilSize)
+    for i,cartesianIndex in enumerate(indeces):
+        if (cartesianIndex-deltaIndex)>-1 && (cartesianIndex+deltaIndex)<lengths[i]: #centered finite difference can be performed
+            startIndex = cartesianIndex-deltaIndex
+            endIndex = cartesianIndex+deltaIndex
+        elif (cartesianIndex-deltaIndex)>-1 # got to be ajusted on the right side
+            startIndex = (cartesianIndex-deltaIndex) - ((cartesianIndex+deltaIndex)-(lengths[i]-1))
+            endIndex = lengths[i]-1
+            if startIndex<0:
+                raise ValueError('The specified stencil size is not compatible with the mesh along dimension ' + str(i+1) + '. Check your input.')
+        elif (cartesianIndex+deltaIndex)<lengths[i] # got to be ajusted on the left side
+            startIndex = 0
+            endIndex = (cartesianIndex+deltaIndex) - (cartesianIndex-deltaIndex) #(cartesianIndex-deltaIndex)<0 in this case
+            if endIndex>=lengths[i]:
+                raise ValueError('The specified stencil size is not compatible with the mesh along dimension ' + str(i+1) + '. Check your input.')
+        else:
+            raise ValueError('The specified stencil size is not compatible with the mesh along dimension ' + str(i+1) + '. Check your input.')
+        currentStencil = []
+        tempCartesianIndeces = indeces
+        for j in range(startIndex,endIndex+1):
+            tempCartesianIndeces[i] = j
+            currentStencil.append(convertIndecesTensorToHelical(tempCartesianIndeces,lengths))
+        stencilIndeces.append(currentStencil)
+    return stencilIndeces
+
+def covariantBaseAtPoint(indeces,lengths,rmap,qmap,stencilSize):
     index = convertIndecesTensorToHelical(indeces,lengths)
     rs = rmap[index]
     qs = qmap[index]
+    hStencils = buildStencils(indeces,lengths,stencilSize)
     gs = []
     for q in qs:
         g = []
         for r in rs:
+
         gs.append(g)
 
     return gs
