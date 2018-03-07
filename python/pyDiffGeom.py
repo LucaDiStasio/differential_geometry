@@ -83,11 +83,31 @@ def covariantBaseAtPoint(indeces,lengths,rmap,qmap,stencilSize):
         for sIndex in stencilIndexSet:
             xs.append(qmap[sIndex][q])
         g = []
-        for r in rs:
+        for r,rCoord in enumerate(rs):
             fs = []
             for sIndex in stencilIndexSet:
                 fs.append(rmap[sIndex][r])
             g.append(computeDerivativeAtPoint(1,q0,xs,fs))
+        gs.append(g)
+    return gs
+
+def contravariantBaseAtPoint(indeces,lengths,rmap,qmap,stencilSize):
+    index = convertIndecesTensorToHelical(indeces,lengths)
+    rs = rmap[index]
+    qs = qmap[index]
+    hStencils = buildStencilsIndeces(indeces,lengths,stencilSize)
+    gs = []
+    for r,r0 in enumerate(rs):
+        stencilIndexSet = hStencils[r]
+        xs = []
+        for sIndex in stencilIndexSet:
+            xs.append(rmap[sIndex][r])
+        g = []
+        for q,qCoord in enumerate(qs):
+            fs = []
+            for sIndex in stencilIndexSet:
+                fs.append(qmap[sIndex][q])
+            g.append(computeDerivativeAtPoint(1,r0,xs,fs))
         gs.append(g)
     return gs
 
