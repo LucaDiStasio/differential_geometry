@@ -29,6 +29,7 @@ Tested with Python 2.7 Anaconda 2.4.1 (64-bit) distribution in Windows 7.
 '''
 
 import sys
+from ..finite_differences/python import computeWeights, computeDerivativeAtPoint
 
 def convertIndecesTensorToHelical(indeces,lengths):
     # indeces = [innermost ... outermost]
@@ -41,7 +42,7 @@ def convertIndecesTensorToHelical(indeces,lengths):
         index += indeces[i]*coeff
     return hindex
 
-def buildStencils(indeces,lengths,stencilSize):
+def buildStencilsIndeces(indeces,lengths,stencilSize):
     # finite differences are assumed to be centered, thus stencilSize must an odd number
     # if the central finite difference cannot be performed, an alternative is computed
     stencilIndeces = []
@@ -74,14 +75,20 @@ def covariantBaseAtPoint(indeces,lengths,rmap,qmap,stencilSize):
     index = convertIndecesTensorToHelical(indeces,lengths)
     rs = rmap[index]
     qs = qmap[index]
-    hStencils = buildStencils(indeces,lengths,stencilSize)
+    hStencils = buildStencilsIndeces(indeces,lengths,stencilSize)
     gs = []
-    for q in qs:
+    for q,q0 in enumerate(qs):
+        stencilIndexSet = hStencils[q]
+        xs = []
+        for sIndex in stencilIndexSet:
+            xs.append(qmap[sIndex][q])
         g = []
         for r in rs:
-
+            fs = []
+            for sIndex in stencilIndexSet:
+                fs.append(rmap[sIndex][r])
+            g.append(computeDerivativeAtPoint(1,q0,xs,fs))
         gs.append(g)
-
     return gs
 
 def main(argv):
