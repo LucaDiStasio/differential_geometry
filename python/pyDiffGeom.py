@@ -42,6 +42,13 @@ def det(A): # determinant of NxN matrix
         res = A[0][0]*A[1][1]-A[1][0]*A[0][1]
     else:
         for j in range(0,N):
+            M = []
+            for row in A(1:):
+                row = []
+                for v,value in enumerate(row):
+                    if v!=j:
+                        row.append(value)
+                M.append(row)
             res += ((-1)**(2+j))*det(M)
     return res
 
@@ -136,8 +143,6 @@ def metricTensorAtPoint(gs):
                 gValue += gs[i][k]*gs[j][k]
             g[i][i] = gValue
     return gij
-
-def metricDeterminantAtPoint(g):
 
 def computeVectorComponentsAtPoint(v,gs):
     N = len(gs)
