@@ -30,6 +30,7 @@ Tested with Python 2.7 Anaconda 2.4.1 (64-bit) distribution in Windows 7.
 
 import sys
 from ..finite_differences/python import computeWeights, computeDerivativeAtPoint
+from ..interpolation/python import zeroTensor
 
 def convertIndecesTensorToHelical(indeces,lengths):
     # indeces = [innermost ... outermost]
@@ -110,6 +111,21 @@ def contravariantBaseAtPoint(indeces,lengths,rmap,qmap,stencilSize):
             g.append(computeDerivativeAtPoint(1,r0,xs,fs))
         gs.append(g)
     return gs
+
+def metricTensorAtPoint(gs):
+    N = len(gs)
+    M = len(gs[0])
+    gij = zeroTensor([N,N])
+    for i in range(0,N):
+        for j in range(0,N):
+            gValue = 0.0
+            for k in range(0,M):
+                gValue += gs[i][k]*gs[j][k]
+            g[i][i] = gValue
+    return gij
+
+def metricDeterminantAtPoint(g):
+
 
 def main(argv):
 
