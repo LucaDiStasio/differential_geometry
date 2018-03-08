@@ -182,6 +182,14 @@ def computeChristoffelSymbolAtPoint(indeces,lengths,qmap,covBase,gs,stencilSize)
                 gammakij[k][i][j] = value
     return gammakij
 
+def computeContravariantRiemann(indeces,lengths,qmap,connectionCoeffs,stencilSize):
+
+def computeCovarRiemann(gls,Rsijk):
+
+def computeRicciTensor(glm,Riljm):
+
+def computeRicciScalar(gij,Rij):
+
 def main(argv):
 
 
