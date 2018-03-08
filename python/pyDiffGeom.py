@@ -32,6 +32,19 @@ import sys
 from ..finite_differences/python import computeWeights, computeDerivativeAtPoint
 from ..interpolation/python import zeros, zeroTensor
 
+def det(A): # determinant of NxN matrix
+    N = len(A)
+    for row in A:
+        if N!=len(row):
+            raise TypeError('The matrix is not square!')
+    res = 0.0
+    if N==2:
+        res = A[0][0]*A[1][1]-A[1][0]*A[0][1]
+    else:
+        for j in range(0,N):
+            res += ((-1)**(2+j))*det(M)
+    return res
+
 def convertIndecesTensorToHelical(indeces,lengths):
     # indeces = [innermost ... outermost]
     # lengths = [innermost ... outermost]
