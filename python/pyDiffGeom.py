@@ -155,6 +155,33 @@ def computeVectorComponentsAtPoint(v,gs):
         w[i] = value
     return w
 
+def computeChristoffelSymbolAtPoint(indeces,lengths,qmap,covBase,gs,stencilSize):
+    index = convertIndecesTensorToHelical(indeces,lengths)
+    qs = qmap[index]
+    hStencils = buildStencilsIndeces(indeces,lengths,stencilSize)
+    K = len(gs)
+    I = len(covBase[index])
+    gammakij = zeroTensor([K,I,I])
+    for k in range(0,K):
+        for i in range(0,I):
+            for j in range(0,I):
+                q0 = qs[j]
+                stencilIndexSet = hStencils[j]
+                xs = []
+                for sIndex in stencilIndexSet:
+                    xs.append(qmap[sIndex][j])
+                dg = []
+                for r,rCoord in enumerate(covBase[index][i]):
+                    fs = []
+                    for sIndex in stencilIndexSet:
+                        fs.append(covBase[sIndex][i][r])
+                    dg.append(computeDerivativeAtPoint(1,q0,xs,fs))
+                value = 0.0
+                for l in range(0,I):
+                    value += dg[l]*gs[k][l]
+                gammakij[k][i][j] = value
+    return gammakij
+
 def main(argv):
 
 
