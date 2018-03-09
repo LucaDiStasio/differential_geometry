@@ -186,10 +186,11 @@ def computeContravariantRiemannAtPoint(indeces,lengths,qmap,connectionCoeffs,ste
     index = convertIndecesTensorToHelical(indeces,lengths)
     qs = qmap[index]
     hStencils = buildStencilsIndeces(indeces,lengths,stencilSize)
-    L =
-    I =
-    J =
-    K =
+    L = len(connectionCoeffs)
+    I = len(connectionCoeffs[0])
+    J = I
+    K = K
+    S = len(connectionCoeffs[0][0])
     Rlijk = zeroTensor([L,I,J,K])
     for l in range(0,L):
         for i in range(0,I):
@@ -201,10 +202,10 @@ def computeContravariantRiemannAtPoint(indeces,lengths,qmap,connectionCoeffs,ste
                     # compute gamma^l_ij,k
 
                     # compute gamma^l_js * gamma^s_ik
-                    for s in range(0,):
+                    for s in range(0,S):
                         element += connectionCoeffs[index][l][j][s]*connectionCoeffs[index][s][i][k]
                     # compute gamma^l_ks * gamma^s_ij
-                    for s in range(0,):
+                    for s in range(0,S):
                         element += connectionCoeffs[index][l][k][s]*connectionCoeffs[index][s][i][j]
                     Rlijk[l][i][j][k] = element
     return Rlijk
