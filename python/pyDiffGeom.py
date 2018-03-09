@@ -198,15 +198,19 @@ def computeContravariantRiemannAtPoint(indeces,lengths,qmap,connectionCoeffs,ste
                 for k in range(0,K):
                     element = 0.0
                     # compute gamma^l_ik,j
+                    dgamma = 0.0
 
+                    element += dgamma
                     # compute gamma^l_ij,k
+                    dgamma = 0.0
 
+                    element -= dgamma
                     # compute gamma^l_js * gamma^s_ik
                     for s in range(0,S):
                         element += connectionCoeffs[index][l][j][s]*connectionCoeffs[index][s][i][k]
                     # compute gamma^l_ks * gamma^s_ij
                     for s in range(0,S):
-                        element += connectionCoeffs[index][l][k][s]*connectionCoeffs[index][s][i][j]
+                        element -= connectionCoeffs[index][l][k][s]*connectionCoeffs[index][s][i][j]
                     Rlijk[l][i][j][k] = element
     return Rlijk
 
