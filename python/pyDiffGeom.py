@@ -235,12 +235,13 @@ def computeRicciTensorAtPoint(glm,Riljm):
     return Rij
 
 def computeRicciScalarAtPoint(gij,Rij):
-
-     R = 0.0
-     for i in range(0,I):
-         for j in range(0,J):
-             R += gij[i][j]*Rij[i][j]
-     return R
+    I = len(gij)
+    J = len(gij[0])
+    R = 0.0
+    for i in range(0,I):
+        for j in range(0,J):
+            R += gij[i][j]*Rij[i][j]
+    return R
 
 def main(argv):
 
