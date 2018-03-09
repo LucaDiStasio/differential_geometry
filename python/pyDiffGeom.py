@@ -195,19 +195,52 @@ def computeContravariantRiemannAtPoint(indeces,lengths,qmap,connectionCoeffs,ste
         for i in range(0,I):
             for j in range(0,J):
                 for k in range(0,K):
+                    element = 0.0
                     # compute gamma^l_ik,j
 
                     # compute gamma^l_ij,k
 
                     # compute gamma^l_js * gamma^s_ik
-
+                    for s in range(0,):
+                        element += connectionCoeffs[index][l][j][s]*connectionCoeffs[index][s][i][k]
                     # compute gamma^l_ks * gamma^s_ij
+                    for s in range(0,):
+                        element += connectionCoeffs[index][l][k][s]*connectionCoeffs[index][s][i][j]
+                    Rlijk[l][i][j][k] = element
+    return Rlijk
 
 def computeCovarRiemannAtPoint(gls,Rsijk):
 
+    Riklm = zeroTensor([I,K,L,M])
+    for i in range(0,I):
+        for k in range(0,K):
+            for l in range(0,L):
+                for m in range(0,M):
+                    element = 0.0
+                        for s in range(0,):
+                            element += gls[l][s]*Rsijk[s][i][j][k]
+                    Riklm[i][k][l][m] = element
+    return Riklm
+
 def computeRicciTensorAtPoint(glm,Riljm):
 
+    Rij = zeroTensor([I,J])
+    for i in range(0,I):
+        for j in range(0,J):
+            element = 0.0
+            for l in range(0,L):
+                for m in range(0,M):
+                    element += glm[l][m]*Riljm[i][l][j][m]
+            Rij[i][j] = element
+    return Rij
+
 def computeRicciScalarAtPoint(gij,Rij):
+
+     R = 0.0
+     for i in range(0,I):
+         for j in range(0,J):
+             R += gij[i][j]*Rij[i][j]
+     return R
 
 def main(argv):
 
