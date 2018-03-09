@@ -209,16 +209,20 @@ def computeContravariantRiemannAtPoint(indeces,lengths,qmap,connectionCoeffs,ste
                     Rlijk[l][i][j][k] = element
     return Rlijk
 
-def computeCovarRiemannAtPoint(gls,Rsijk):
-
+def computeCovarRiemannAtPoint(gis,Rsklm):
+    S = len(Rsklm)
+    I = len(gis)
+    K = len(Rsklm[0])
+    L = len(Rsklm[0][0])
+    M = len(Rsklm[0][0][0])
     Riklm = zeroTensor([I,K,L,M])
     for i in range(0,I):
         for k in range(0,K):
             for l in range(0,L):
                 for m in range(0,M):
                     element = 0.0
-                        for s in range(0,):
-                            element += gls[l][s]*Rsijk[s][i][j][k]
+                        for s in range(0,S):
+                            element += gis[i][s]*Rsklm[s][k][l][m]
                     Riklm[i][k][l][m] = element
     return Riklm
 
