@@ -223,7 +223,10 @@ def computeCovarRiemannAtPoint(gls,Rsijk):
     return Riklm
 
 def computeRicciTensorAtPoint(glm,Riljm):
-
+    I = len(Riljm)
+    L = len(Riljm[0])
+    J = len(Riljm[0][0])
+    M = len(Riljm[0][0][0])
     Rij = zeroTensor([I,J])
     for i in range(0,I):
         for j in range(0,J):
