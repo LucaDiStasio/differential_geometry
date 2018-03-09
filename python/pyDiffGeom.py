@@ -199,11 +199,27 @@ def computeContravariantRiemannAtPoint(indeces,lengths,qmap,connectionCoeffs,ste
                     element = 0.0
                     # compute gamma^l_ik,j
                     dgamma = 0.0
-
+                    q0 = qs[j]
+                    stencilIndexSet = hStencils[j]
+                    xs = []
+                    for sIndex in stencilIndexSet:
+                        xs.append(qmap[sIndex][j])
+                    fs = []
+                    for sIndex in stencilIndexSet:
+                        fs.append(connectionCoeffs[sIndex][l][i][k])
+                    dgamma = computeDerivativeAtPoint(1,q0,xs,fs)
                     element += dgamma
                     # compute gamma^l_ij,k
                     dgamma = 0.0
-
+                    q0 = qs[k]
+                    stencilIndexSet = hStencils[k]
+                    xs = []
+                    for sIndex in stencilIndexSet:
+                        xs.append(qmap[sIndex][k])
+                    fs = []
+                    for sIndex in stencilIndexSet:
+                        fs.append(connectionCoeffs[sIndex][l][i][j])
+                    dgamma = computeDerivativeAtPoint(1,q0,xs,fs)
                     element -= dgamma
                     # compute gamma^l_js * gamma^s_ik
                     for s in range(0,S):
